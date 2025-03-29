@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعبئة الرصيد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            text-align: center;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .topup-container {
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: slideDown 1.5s ease-in-out;
+        }
+
+        .topup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .input-group label {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        .payment-methods {
+            text-align: right;
+        }
+
+        .payment-methods label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        .upload-section {
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .instructions i {
+            margin-left: 5px;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #45a049;
+        }
+
+        .upload-btn input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .confirm-btn {
+            background: #ff4b2b;
+            margin-top: 10px;
+        }
+
+        .confirm-btn:hover {
+            background: #ff6b4b;
+        }
+
+        .back-btn {
+            background: #555;
+            margin-top: 5px;
+        }
+
+        .back-btn:hover {
+            background: #666;
+        }
+
+        .spacer {
+            height: 15px;
+        }
+
+        /* أنماط الرسالة المخصصة */
+        .custom-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .alert-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .alert-icon {
+            font-size: 50px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .alert-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ff4b2b;
+        }
+        
+        .alert-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .alert-button {
+            background: #ff4b2b;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .alert-button:hover {
+            background: #ff6b4b;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topup-container">
+        <h1>تعبئة الرصيد</h1>
+        <form class="topup-form" id="topupForm">
+            <div class="input-group">
+                <label for="amount">المبلغ (من 50 إلى 1000 جنيه):</label>
+                <input type="number" id="amount" name="amount" min="50" max="1000" required>
+            </div>
+            
+            <div class="payment-methods">
+                <p>طرق الدفع:</p>
+                <label>
+                    <input type="radio" name="payment" value="vodafone" checked> فودافون كاش
+                </label>
+                <label>
+                    <input type="radio" name="payment" value="orange" disabled> أورانج كاش
+                </label>
+                <label>
+                    <input type="radio" name="payment" value="etisalat" disabled> اتصالات كاش
+                </label>
+            </div>
+            
+            <p>رقم فودافون كاش: <strong>01064081244</strong></p>
+            
+            <div class="upload-section">
+                <p class="instructions">
+                    <i class="fas fa-info-circle"></i> عند الانتهاء من التحويل، قم بإرفاق صورة إثبات التحويل وسيتم التحقق منها خلال 5 دقائق
+                </p>
+                <label for="screenshot" class="upload-btn">
+                    <i class="fas fa-upload"></i> إرفاق صورة التحويل
+                    <input type="file" id="screenshot" name="screenshot" accept="image/*" required>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn confirm-btn">تأكيد الدفع</button>
+            
+            <div class="spacer"></div>
+            
+            <a href="services.html" class="btn back-btn">العودة للخدمات</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("topupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // الحصول على قيمة المبلغ المدخل
+            const amount = document.getElementById("amount").value;
+            
+            // إنشاء عنصر الرسالة المخصصة
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'custom-alert';
+            alertDiv.innerHTML = `
+                <div class="alert-content">
+                    <div class="alert-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="alert-title">شكراً لك!</h2>
+                    <p class="alert-message">
+                        تم استلام طلب تعبئة رصيد بقيمة ${amount} جنيه<br>
+                        سيتم التحقق من التحويل خلال 5 دقائق<br>
+                        سيتم إضافة الرصيد تلقائياً بعد التأكد
+                    </p>
+                    <button class="alert-button" onclick="this.parentElement.parentElement.remove()">حسناً</button>
+                </div>
+            `;
+            
+            // إضافة الرسالة إلى body
+            document.body.appendChild(alertDiv);
+            
+            // هنا يمكنك إضافة كود إرسال البيانات إلى الخادم
+            // const formData = new FormData(document.getElementById('topupForm'));
+            // fetch('your-server-endpoint', { method: 'POST', body: formData })
+            //   .then(response => response.json())
+            //   .then(data => console.log(data))
+            //   .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
